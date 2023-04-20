@@ -10,9 +10,13 @@ import { LocalStrategy } from 'src/strategies/local.strategy';
   imports: [
     UsersModule,
     PassportModule,
-    JwtModule.register({
-      secret: 'WILLIANSCRT', //put the secret into the ENV variables
-      signOptions: { expiresIn: '60s' },
+    JwtModule.registerAsync({
+      useFactory: async () => ({
+        secret: process.env.JWT_SECRET_KEY,
+        signOptions: {
+          expiresIn: process.env.JWT_EXPIRATION_TIME,
+        },
+      }),
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
